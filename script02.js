@@ -70,10 +70,10 @@ snapBtn.addEventListener('click', () => {
 
     // 날짜 합성
     ctx.font = "500 42px 'Mona', sans-serif";
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    ctx.fillText(getFormattedDateTime(), canvas.width / 2, 70);
+    ctx.fillText(getFormattedDateTime(), canvas.width / 2, 57);
 
     finalImageData = canvas.toDataURL('image/png');
     previewImg.src = finalImageData;

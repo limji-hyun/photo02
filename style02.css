@@ -30,9 +30,9 @@ body { font-family: -apple-system, sans-serif; background-color: #000; }
 
 /* 타이틀 로고 */
 .title-gif {
-    width: 70%;
+    width: 90%;
     margin-bottom: 50px;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9));
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
 }
 
 /* [촬영 부스 스타일] */
@@ -113,7 +113,7 @@ body { font-family: -apple-system, sans-serif; background-color: #000; }
 
 /* 버튼 이미지 공통 스타일 */
 .custom-btn, .custom-btn-sub {
-    width: 140px; /* 버튼 크기 통일 */
+    width: 160px; /* 버튼 크기 통일 */
     cursor: pointer;
     transition: transform 0.1s ease;
     -webkit-tap-highlight-color: transparent;

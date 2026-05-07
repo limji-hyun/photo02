@@ -1,3 +1,9 @@
+const cameraToggleBtn = document.getElementById('camera-toggle-btn');
+
+let finalImageData = null;
+let currentStream = null;
+let currentFacingMode = "user";
+
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const previewImg = document.getElementById('preview-img');
@@ -10,7 +16,7 @@ const enterBtn = document.getElementById('enter-btn');
 const previewControls = document.getElementById('preview-controls');
 const photoZone = document.getElementById('photo-zone');
 
-let finalImageData = null;
+// let finalImageData = null;
 
 // 날짜 포맷 (YYYY.MM.DD HH:mm)
 function getFormattedDateTime() {
@@ -22,17 +28,62 @@ function getFormattedDateTime() {
 setInterval(() => { dateOverlay.innerText = getFormattedDateTime(); }, 1000);
 dateOverlay.innerText = getFormattedDateTime();
 
+
+// enterBtn.addEventListener('click', async () => {
+//     try {
+//         const stream = await navigator.mediaDevices.getUserMedia({
+//             video: { facingMode: "user", width: { ideal: 1280 } },
+//             audio: false
+//         });
+//         video.srcObject = stream;
+//         document.getElementById('home-screen').style.display = "none";
+//         document.getElementById('booth-screen').style.display = "flex";
+//     } catch (err) { alert("카메라 접근 권한을 허용해주세요."); }
+// });
+
 // [btn1] 입장하기
 enterBtn.addEventListener('click', async () => {
+    currentFacingMode = "user";
+    await startCamera(currentFacingMode);
+
+    document.getElementById('home-screen').style.display = "none";
+    document.getElementById('booth-screen').style.display = "flex";
+});
+
+async function startCamera(facingMode = "user") {
     try {
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+        }
+
         const stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "user", width: { ideal: 1280 } },
+            video: {
+                facingMode: { ideal: facingMode },
+                width: { ideal: 1280 }
+            },
             audio: false
         });
+
+        currentStream = stream;
         video.srcObject = stream;
-        document.getElementById('home-screen').style.display = "none";
-        document.getElementById('booth-screen').style.display = "flex";
-    } catch (err) { alert("카메라 접근 권한을 허용해주세요."); }
+
+    } catch (err) {
+        console.error(err);
+        alert("카메라 접근 권한을 허용해주세요.");
+    }
+}
+
+//카메라 전환 코드
+cameraToggleBtn.addEventListener('click', async () => {
+    currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+
+    await startCamera(currentFacingMode);
+
+    if (currentFacingMode === "user") {
+        video.style.transform = "scaleX(-1)";
+    } else {
+        video.style.transform = "scaleX(1)";
+    }
 });
 
 // [btn2] 사진 찍기
@@ -59,11 +110,15 @@ snapBtn.addEventListener('click', () => {
         sX = 0; sY = (vH - sH) / 2;
     }
 
-    ctx.save();
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(video, sX, sY, sW, sH, 0, 0, canvas.width, canvas.height);
-    ctx.restore();
+    if (currentFacingMode === "user") {
+        ctx.save();
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, sX, sY, sW, sH, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+    } else {
+        ctx.drawImage(video, sX, sY, sW, sH, 0, 0, canvas.width, canvas.height);
+    }
     
     // 프레임 합성 (좌표 0,0 고정)
     ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);

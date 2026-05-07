@@ -75,10 +75,19 @@ async function startCamera(facingMode = "user") {
 
 //카메라 전환 코드
 cameraToggleBtn.addEventListener('click', async () => {
-    currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+
+    // 버튼 회전
+    cameraToggleBtn.classList.toggle('rotate');
+
+    // 카메라 전환
+    currentFacingMode =
+        currentFacingMode === "user"
+            ? "environment"
+            : "user";
 
     await startCamera(currentFacingMode);
 
+    // 전면/후면 미러 처리
     if (currentFacingMode === "user") {
         video.style.transform = "scaleX(-1)";
     } else {

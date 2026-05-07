@@ -146,6 +146,7 @@ snapBtn.addEventListener('click', () => {
         previewImg.style.display = "block";
         // 버튼 전환
         snapBtn.style.display = "none";
+        cameraToggleBtn.style.display = "none";
         previewControls.style.display = "flex";
     };
 });
@@ -155,6 +156,7 @@ retakeBtn.addEventListener('click', () => {
     video.style.opacity = "1";
     previewImg.style.display = "none";
     snapBtn.style.display = "block";
+    cameraToggleBtn.style.display = "block";
     previewControls.style.display = "none";
     finalImageData = null;
 });
